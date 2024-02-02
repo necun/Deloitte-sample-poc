@@ -23,7 +23,9 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.graphics.drawable.ColorDrawable
 import android.os.Environment
+import android.view.View
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -51,20 +53,46 @@ class ImageFilter : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     viewBinding = ActivityImageFilterBinding.inflate(layoutInflater)
     setContentView(viewBinding.root)
+    supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.white)))
     //deleteInternalStorageDirectoryy()
-    viewBinding.aIFilter.setOnClickListener {
+    viewBinding.aiFilterImgBtn.setOnClickListener {
+      viewBinding.aiFilterProgressbar.visibility=View.VISIBLE
+      deleteInternalStorageDirectoryy()
+      viewBinding.originalFilterImageView.setImageResource(R.drawable.ic_no_picture)
+      viewBinding.blackAndWhiteFilterImageView.setImageResource(R.drawable.ic_no_picture)
+      viewBinding.greyFilterImageView.setImageResource(R.drawable.ic_no_picture)
+      viewBinding.softFilterImageView.setImageResource(R.drawable.ic_no_picture)
+
       doSaveGetSave()
       aiFilter()
     }
-    viewBinding.grey.setOnClickListener {
+    viewBinding.greyFilterImgBtn.setOnClickListener {
+      viewBinding.greyFilterProgressbar.visibility=View.VISIBLE
+      deleteInternalStorageDirectoryy()
+      viewBinding.originalFilterImageView.setImageResource(R.drawable.ic_no_picture)
+      viewBinding.blackAndWhiteFilterImageView.setImageResource(R.drawable.ic_no_picture)
+      viewBinding.aiFilterImageView.setImageResource(R.drawable.ic_no_picture)
+      viewBinding.softFilterImageView.setImageResource(R.drawable.ic_no_picture)
       doSaveGetSave()
       greyFilter()
     }
-    viewBinding.soft.setOnClickListener {
+    viewBinding.softFilterImgBtn.setOnClickListener {
+      viewBinding.softFilterProgressbar.visibility=View.VISIBLE
+      deleteInternalStorageDirectoryy()
+      viewBinding.originalFilterImageView.setImageResource(R.drawable.ic_no_picture)
+      viewBinding.blackAndWhiteFilterImageView.setImageResource(R.drawable.ic_no_picture)
+      viewBinding.aiFilterImageView.setImageResource(R.drawable.ic_no_picture)
+      viewBinding.greyFilterImageView.setImageResource(R.drawable.ic_no_picture)
       doSaveGetSave()
       softFilter()
     }
-    viewBinding.blackAndWhite.setOnClickListener {
+    viewBinding.blackAndWhiteFilterImgBtn.setOnClickListener {
+      viewBinding.blackAndWhiteFilterProgressbar.visibility=View.VISIBLE
+      deleteInternalStorageDirectoryy()
+      viewBinding.originalFilterImageView.setImageResource(R.drawable.ic_no_picture)
+      viewBinding.aiFilterImageView.setImageResource(R.drawable.ic_no_picture)
+      viewBinding.greyFilterImageView.setImageResource(R.drawable.ic_no_picture)
+      viewBinding.softFilterImageView.setImageResource(R.drawable.ic_no_picture)
       doSaveGetSave()
       blackAndWhiteFilter()
     }
@@ -98,13 +126,27 @@ class ImageFilter : AppCompatActivity() {
 //
 //      viewBinding.imageView2.setImageBitmap(b)
 //    }
-    viewBinding.SaveButton.setOnClickListener {
+//    viewBinding.SaveButton.setOnClickListener {
+//      doSave()
+//    }
+    viewBinding.tickMarkImageView.setOnClickListener {
       doSave()
+    }
+    viewBinding.cameraRetakeImageView.setOnClickListener {
+      val intent = Intent(this@ImageFilter,MainActivity::class.java)
+      startActivity(intent)
+      deleteInternalStorageDirectoryy()
     }
 //    viewBinding.SoftFilterButton.setOnClickListener {
 //      doSoftFilter()
 //    }
-    viewBinding.original.setOnClickListener {
+    viewBinding.originalFilterImgBtn.setOnClickListener {
+      viewBinding.originalFilterProgressbar.visibility=View.VISIBLE
+      deleteInternalStorageDirectoryy()
+      viewBinding.greyFilterImageView.setImageResource(R.drawable.ic_no_picture)
+      viewBinding.blackAndWhiteFilterImageView.setImageResource(R.drawable.ic_no_picture)
+      viewBinding.aiFilterImageView.setImageResource(R.drawable.ic_no_picture)
+      viewBinding.softFilterImageView.setImageResource(R.drawable.ic_no_picture)
       doNoFilter()
     }
 //    viewBinding.OCRButton.setOnClickListener {
@@ -156,8 +198,16 @@ class ImageFilter : AppCompatActivity() {
     val f=File(output_path,"enhanced_image.jpg")
     System.out.println("122334465=")
     val b=BitmapFactory.decodeStream(FileInputStream(f))
+       if(b != null){
+         viewBinding.aiFilterProgressbar.visibility = View.GONE
+         viewBinding.aiFilterImageView.setImageBitmap(b)
+         viewBinding.imageView2.setImageBitmap(b)
+       }
+    else{
+         viewBinding.aiFilterProgressbar.visibility = View.VISIBLE
+         viewBinding.aiFilterImageView.setImageResource(R.drawable.ic_no_picture)
+       }
 
-    viewBinding.imageView2.setImageBitmap(b)
   }
 
   private fun greyFilter(){
@@ -180,8 +230,17 @@ class ImageFilter : AppCompatActivity() {
     val f=File(output_path,"enhanced_image.jpg")
     System.out.println("122334465=")
     val b=BitmapFactory.decodeStream(FileInputStream(f))
+    if(b != null){
+      viewBinding.imageView2.setImageBitmap(b)
+      viewBinding.greyFilterImageView.setImageBitmap(b)
+      viewBinding.greyFilterProgressbar.visibility = View.GONE
 
-    viewBinding.imageView2.setImageBitmap(b)
+
+    }else{
+      viewBinding.greyFilterProgressbar.visibility = View.VISIBLE
+      viewBinding.greyFilterImageView.setImageResource(R.drawable.ic_no_picture)
+    }
+
   }
 
   private fun softFilter(){
@@ -204,8 +263,15 @@ class ImageFilter : AppCompatActivity() {
     val f=File(output_path,"enhanced_image.jpg")
     System.out.println("122334465=")
     val b=BitmapFactory.decodeStream(FileInputStream(f))
+          if(b != null) {
+            viewBinding.imageView2.setImageBitmap(b)
+               viewBinding.softFilterImageView.setImageBitmap(b)
+            viewBinding.softFilterProgressbar.visibility = View.GONE
+          }else{
+            viewBinding.softFilterImageView.setImageResource(R.drawable.ic_no_picture);
+            viewBinding.softFilterProgressbar.visibility= View.VISIBLE
 
-    viewBinding.imageView2.setImageBitmap(b)
+          }
   }
 
   private fun blackAndWhiteFilter(){
@@ -228,8 +294,17 @@ class ImageFilter : AppCompatActivity() {
     val f=File(output_path,"enhanced_image.jpg")
     System.out.println("122334465=")
     val b=BitmapFactory.decodeStream(FileInputStream(f))
+    if(b != null){
+      viewBinding.imageView2.setImageBitmap(b)
+      viewBinding.blackAndWhiteFilterImageView.setImageBitmap(b)
+      viewBinding.blackAndWhiteFilterProgressbar.visibility = View.GONE
 
-    viewBinding.imageView2.setImageBitmap(b)
+
+    }else{
+      viewBinding.blackAndWhiteFilterProgressbar.visibility = View.VISIBLE
+      viewBinding.blackAndWhiteFilterImageView.setImageResource(R.drawable.ic_no_picture)
+    }
+
   }
 
   private fun doEnhancePythonFilter()
@@ -296,7 +371,17 @@ class ImageFilter : AppCompatActivity() {
     val resultBitmap =
       Bitmap.createBitmap(original.cols(), original.rows(), Bitmap.Config.ARGB_8888)
     Utils.matToBitmap(original, resultBitmap)
-    viewBinding.imageView2.setImageBitmap(resultBitmap)
+    if(resultBitmap != null){
+      viewBinding.imageView2.setImageBitmap(resultBitmap)
+      viewBinding.originalFilterImageView.setImageBitmap(resultBitmap)
+      viewBinding.originalFilterProgressbar.visibility = View.GONE
+
+
+    }else{
+      viewBinding.originalFilterProgressbar.visibility = View.VISIBLE
+      viewBinding.originalFilterImageView.setImageResource(R.drawable.ic_no_picture)
+    }
+
   }
   private fun doOCR() {
     val result = result ?: return
@@ -463,6 +548,7 @@ class ImageFilter : AppCompatActivity() {
 
   override fun onBackPressed() {
     // Start MainActivity
+    deleteInternalStorageDirectoryy()
     val intent = Intent(this, MainActivity::class.java)
     startActivity(intent)
 

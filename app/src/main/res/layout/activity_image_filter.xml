@@ -7,103 +7,426 @@
     tools:context=".ImageFilter">
 
     <com.jsibbold.zoomage.ZoomageView
-        android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="130dp"
-        tools:layout_editor_absoluteY="264dp"
-        app:layout_constraintHeight_percent="0.5"
-        tools:srcCompat="@tools:sample/avatars"
-        />
-    <HorizontalScrollView
 
+        android:id="@+id/imageView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:srcCompat="@tools:sample/avatars"
+
+        app:layout_constraintBottom_toTopOf="@id/horizontalSV"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <HorizontalScrollView
+        android:paddingStart="40dp"
+        android:paddingEnd="40dp"
+        android:clipToPadding="false"
         android:id="@+id/horizontalSV"
-        android:layout_marginBottom="60dp"
+android:fillViewport="true"
         android:layout_width="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cameraLay"
+             app:layout_constraintTop_toBottomOf="@id/imageView2"
 
-        android:scrollbars="none"
 
         >
         <androidx.constraintlayout.widget.ConstraintLayout
-
+            android:id="@+id/filterLay"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <androidx.appcompat.widget.AppCompatButton
-                android:background="@drawable/button_bg"
-                android:textColor="@color/white"
-                android:id="@+id/original"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="original"
-                android:fontFamily="@font/inter_regular"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-            <androidx.appcompat.widget.AppCompatButton
-                android:background="@drawable/button_bg"
-                android:fontFamily="@font/inter_regular"
-                android:textColor="@color/white"
-                android:id="@+id/aIFilter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="ai filter"
-                app:layout_constraintLeft_toRightOf="@+id/original"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-            <androidx.appcompat.widget.AppCompatButton
-                android:background="@drawable/button_bg"
-                android:fontFamily="@font/inter_regular"
-                android:textColor="@color/white"
-                android:id="@+id/blackAndWhite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Black &amp; white"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                app:layout_constraintLeft_toRightOf="@+id/aIFilter"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-            <androidx.appcompat.widget.AppCompatButton
-                android:fontFamily="@font/inter_regular"
-                android:background="@drawable/button_bg"
-                android:textColor="@color/white"
-                android:id="@+id/grey"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="grey"
-                app:layout_constraintLeft_toRightOf="@+id/blackAndWhite"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-            <androidx.appcompat.widget.AppCompatButton
-                android:background="@drawable/button_bg"
-                android:fontFamily="@font/inter_regular"
-                android:textColor="@color/white"
-                android:id="@+id/soft"
+            android:layout_height="wrap_content"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/originalFilterImgBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:text="soft"
-                app:layout_constraintLeft_toRightOf="@+id/grey"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:orientation="vertical"
+
+                app:layout_constraintStart_toStartOf="parent"
+
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/originalFilterImageView"
+                    android:layout_width="57dp"
+                    android:background="@drawable/filter_img_bg"
+                    android:layout_height="57dp"
+                    android:paddingStart="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_no_picture"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/originalFilterTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    app:layout_constraintTop_toBottomOf="@id/originalFilterImageView"
+                    app:layout_constraintEnd_toEndOf="@id/originalFilterImageView"
+                   app:layout_constraintStart_toStartOf="@id/originalFilterImageView"
+                    android:gravity="center"
+                    android:text="Original"
+                    android:layout_marginTop="15dp"
+                    android:textColor="@color/black"
+                    android:textSize="10sp" />
+                <ProgressBar
+                    android:id="@+id/originalFilterProgressbar"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:visibility="gone"
+                    android:indeterminateTint="@color/colorAccent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/originalFilterImageView"
+                    app:layout_constraintBottom_toBottomOf="@id/originalFilterImageView"
+                    />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/aiFilterImgBtn"
+                android:layout_marginStart="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@id/blackAndWhiteFilterImgBtn"
+                app:layout_constraintStart_toEndOf="@id/originalFilterImgBtn"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/aiFilterImageView"
+                    android:layout_width="57dp"
+                    android:background="@drawable/filter_img_bg"
+                    android:layout_height="57dp"
+                    android:paddingStart="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_no_picture"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/aIFilterTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center"
+                    android:text="AI Filter"
+                    android:textColor="@color/black"
+                    android:textSize="10sp"
+                    app:layout_constraintEnd_toEndOf="@id/aiFilterImageView"
+                    app:layout_constraintStart_toStartOf="@id/aiFilterImageView"
+                    app:layout_constraintTop_toBottomOf="@id/aiFilterImageView" />
+
+                <ProgressBar
+                    android:id="@+id/aiFilterProgressbar"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:visibility="gone"
+                    android:indeterminateTint="@color/colorAccent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/aiFilterImageView"
+                    app:layout_constraintBottom_toBottomOf="@id/aiFilterImageView"
+                    />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/blackAndWhiteFilterImgBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+android:paddingStart="10dp"
+                android:orientation="vertical"
+                android:layout_marginStart="10dp"
+
+                app:layout_constraintEnd_toStartOf="@id/greyFilterImgBtn"
+                app:layout_constraintStart_toEndOf="@id/aiFilterImgBtn"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/blackAndWhiteFilterImageView"
+                    android:layout_width="57dp"
+                    android:background="@drawable/filter_img_bg"
+                    android:layout_height="57dp"
+                    android:scaleType="centerCrop"
+                    android:paddingStart="5dp"
+
+                    android:paddingTop="5dp"
+                    android:paddingEnd="5dp"
+                    android:src="@drawable/ic_no_picture"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/blackAndWhiteFilterTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    app:layout_constraintTop_toBottomOf="@id/blackAndWhiteFilterImageView"
+                    app:layout_constraintEnd_toEndOf="@id/blackAndWhiteFilterImageView"
+                    app:layout_constraintStart_toStartOf="@id/blackAndWhiteFilterImageView"
+                    android:gravity="center"
+android:paddingStart="5dp"
+                    android:text="Black &amp; White"
+                    android:layout_marginTop="15dp"
+                    android:textColor="@color/black"
+                    android:textSize="10sp" />
+
+                <ProgressBar
+                    android:id="@+id/blackAndWhiteFilterProgressbar"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:visibility="gone"
+                    android:indeterminateTint="@color/colorAccent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/blackAndWhiteFilterImageView"
+                    app:layout_constraintBottom_toBottomOf="@id/blackAndWhiteFilterImageView"
+                    />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/greyFilterImgBtn"
+                android:layout_marginStart="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@id/softFilterImgBtn"
+                app:layout_constraintStart_toEndOf="@id/blackAndWhiteFilterImgBtn"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/greyFilterImageView"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:background="@drawable/filter_img_bg"
+                    android:scaleType="centerCrop"
+                    android:paddingStart="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:src="@drawable/ic_no_picture" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/greyFilterTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    app:layout_constraintTop_toBottomOf="@id/greyFilterImageView"
+                    app:layout_constraintEnd_toEndOf="@id/greyFilterImageView"
+                    app:layout_constraintStart_toStartOf="@id/greyFilterImageView"
+                    android:gravity="center"
+                    android:text="Grey"
+                    android:layout_marginTop="15dp"
+                    android:textColor="@color/black"
+                    android:textSize="10sp" />
+
+                <ProgressBar
+                    android:id="@+id/greyFilterProgressbar"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:visibility="gone"
+                    android:indeterminateTint="@color/colorAccent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/greyFilterImageView"
+                    app:layout_constraintBottom_toBottomOf="@id/greyFilterImageView"
+                    />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/softFilterImgBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:orientation="vertical"
+                android:layout_marginStart="20dp"
+
+                app:layout_constraintStart_toEndOf="@id/greyFilterImgBtn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/softFilterImageView"
+                    android:layout_width="57dp"
+                    android:layout_height="57dp"
+                    android:background="@drawable/filter_img_bg"
+                    android:scaleType="centerCrop"
+                    android:paddingStart="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="5dp"
+                    android:src="@drawable/ic_no_picture"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/softFilterTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    app:layout_constraintTop_toBottomOf="@id/softFilterImageView"
+                    app:layout_constraintEnd_toEndOf="@id/softFilterImageView"
+                    app:layout_constraintStart_toStartOf="@id/softFilterImageView"
+                    android:gravity="center"
+                    android:text="Soft"
+                    android:layout_marginTop="15dp"
+                    android:textColor="@color/black"
+                    android:textSize="10sp" />
+
+                <ProgressBar
+                    android:id="@+id/softFilterProgressbar"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:visibility="gone"
+                    android:indeterminateTint="@color/colorAccent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/softFilterImageView"
+                    app:layout_constraintBottom_toBottomOf="@id/softFilterImageView"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent">-->
+<!--            <androidx.appcompat.widget.AppCompatButton-->
+<!--                android:background="@drawable/button_bg"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:id="@+id/original"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="original"-->
+<!--                android:fontFamily="@font/inter_regular"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                android:layout_marginLeft="8dp"-->
+<!--                android:layout_marginRight="8dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"/>-->
+<!--            <androidx.appcompat.widget.AppCompatButton-->
+<!--                android:background="@drawable/button_bg"-->
+<!--                android:fontFamily="@font/inter_regular"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:id="@+id/aIFilter"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="ai filter"-->
+<!--                app:layout_constraintLeft_toRightOf="@+id/original"-->
+<!--                android:layout_marginLeft="8dp"-->
+<!--                android:layout_marginRight="8dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"/>-->
+<!--            <androidx.appcompat.widget.AppCompatButton-->
+<!--                android:background="@drawable/button_bg"-->
+<!--                android:fontFamily="@font/inter_regular"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:id="@+id/blackAndWhite"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Black &amp; white"-->
+<!--                android:paddingStart="14dp"-->
+<!--                android:paddingEnd="14dp"-->
+<!--                app:layout_constraintLeft_toRightOf="@+id/aIFilter"-->
+<!--                android:layout_marginLeft="8dp"-->
+<!--                android:layout_marginRight="8dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"/>-->
+<!--            <androidx.appcompat.widget.AppCompatButton-->
+<!--                android:fontFamily="@font/inter_regular"-->
+<!--                android:background="@drawable/button_bg"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:id="@+id/grey"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="grey"-->
+<!--                app:layout_constraintLeft_toRightOf="@+id/blackAndWhite"-->
+<!--                android:layout_marginLeft="8dp"-->
+<!--                android:layout_marginRight="8dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"/>-->
+<!--            <androidx.appcompat.widget.AppCompatButton-->
+<!--                android:background="@drawable/button_bg"-->
+<!--                android:fontFamily="@font/inter_regular"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:id="@+id/soft"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+
+<!--                android:text="soft"-->
+<!--                app:layout_constraintLeft_toRightOf="@+id/grey"-->
+<!--                android:layout_marginLeft="8dp"-->
+<!--                android:layout_marginRight="8dp"-->
+<!--                app:layout_constraintRight_toRightOf="parent"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"/>-->
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
     </HorizontalScrollView>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cameraLay"
+        app:layout_constraintTop_toBottomOf="@id/horizontalSV"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+
+        >
+
+        <ImageView
+
+            app:layout_constraintHorizontal_chainStyle="packed"
+
+                     android:id="@+id/cameraRetakeImageView"
+            app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginEnd="10dp"
+                    app:layout_constraintEnd_toStartOf="@id/tickMarkImageView"
+            android:src="@drawable/camera_retake"
+            android:scaleType="centerCrop"/>
+        <ImageView
+            android:layout_marginStart="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/tickMarkImageView"
+             app:layout_constraintStart_toEndOf="@+id/cameraRetakeImageView"
+            app:layout_constraintTop_toTopOf="@id/cameraRetakeImageView"
+app:layout_constraintBottom_toBottomOf="@id/cameraRetakeImageView"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:src="@drawable/tick_mark"
+            android:scaleType="centerCrop"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <!--    <Button-->
     <!--        android:id="@+id/BWFilterButton"-->
     <!--        android:layout_width="wrap_content"-->
@@ -144,7 +467,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-
+           android:visibility="gone"
         android:text="Save"
 
         app:layout_constraintEnd_toEndOf="parent"

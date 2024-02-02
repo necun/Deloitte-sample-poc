@@ -177,7 +177,8 @@ def grey_filter(input_image_path,output_path):
         print(f"Error: C3ould not load image from {input_image_path}")
         return
     image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    # thresh = cv2.adaptiveThreshold(image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 21, 15)
+    # thresh = cv2.adaptiveT
+    # hreshold(image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 21, 15)
     # dilate_kernel = np.ones((1, 1), np.uint8)
     # dilated = cv2.dilate(thresh, dilate_kernel, iterations=1)
     # cv2.imwrite('final_image3.jpg', thresh, [int(cv2.IMWRITE_JPEG_QUALITY), 85])
