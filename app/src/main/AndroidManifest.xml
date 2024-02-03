@@ -26,16 +26,19 @@
 
     <application
         android:allowBackup="true"
-        android:usesCleartextTraffic="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="ReNote.AI"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CameraXApp"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".EmailPopUpActivity"
+            android:exported="false" />
         <activity
             android:name=".EmailActivity"
             android:exported="false" />
@@ -69,11 +72,31 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="ocr" />
+        <activity
+            android:name="com.microsoft.identity.client.BrowserTabActivity"
+            android:exported="true"
+            tools:replace="android:exported">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!--
+                    Add in your scheme/host from registered redirect URI
+                    note that the leading "/" is required for android:path
+                -->
+                <data
+                    android:host="com.example.cameraxapp"
+                    android:path="/1rgDpW12JgYIWr+6G4xpMEwTySk="
+                    android:scheme="msauth" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

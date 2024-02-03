@@ -1,12 +1,17 @@
 package com.example.cameraxapp
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
+import android.view.View
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.cameraxapp.databinding.ActivityEmailBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,12 +48,76 @@ class EmailActivity : AppCompatActivity() {
         viewBinding.emailImageView.setOnClickListener{
             initSendEmail()
         }
+        viewBinding.cameraRetakeImgVw.setOnClickListener{
+            deleteInternalStorageDirectoryy()
+            val intent = Intent(this@EmailActivity,MainActivity::class.java)
+            startActivity(intent)
+        }
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        deleteInternalStorageDirectoryy()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        deleteInternalStorageDirectoryy()
+    }
+
+    fun deleteInternalStorageDirectoryy() {
+        if (ContextCompat.checkSelfPermission(
+                this@EmailActivity,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_DENIED
+        ) {
+            val input_pathh = File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                    .toString() + "/CameraX-Image/"
+            )
+
+
+            val input_path = File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                    .toString() + "/CameraX-Image-Input/"
+            )
+            val output_pathh = File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                    .toString() + "/CameraX-Image-Output/"
+            )
+            if (input_path.exists()) {
+                input_path.deleteRecursively()
+            }
+            if (input_pathh.exists()) {
+                input_pathh.deleteRecursively()
+            }
+            if (output_pathh.exists()) {
+                output_pathh.deleteRecursively()
+            }
+        } else {
+            requestRuntimePermissionn()
+        }
+    }
+    private fun requestRuntimePermissionn(): Boolean {
+        if (ActivityCompat.checkSelfPermission(
+                this@EmailActivity,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this@EmailActivity,
+                arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                14
+            )
+            return false
+        }
+        return true
     }
 
     @SuppressLint("SuspiciousIndentation")
     private fun initSendEmail(){
-
+        viewBinding.progressBar.visibility = View.VISIBLE
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
 
@@ -83,12 +152,17 @@ class EmailActivity : AppCompatActivity() {
                     try {
                         val response = response.body()
                         if (response != null) {
-                            Toast.makeText(
-                                this@EmailActivity,
-                                "" + response.message,
-                                Toast.LENGTH_LONG
-                            ).show()
+
+                            viewBinding.progressBar.visibility = View.GONE
+                            val intent =Intent(this@EmailActivity,EmailPopUpActivity::class.java)
+                            startActivity(intent)
+//                            Toast.makeText(
+//                                this@EmailActivity,
+//                                "" + response.message,
+//                                Toast.LENGTH_LONG
+//                            ).show()
                         } else {
+
                             Toast.makeText(
                                 this@EmailActivity,
                                 "please try again after sometime",
@@ -107,6 +181,7 @@ class EmailActivity : AppCompatActivity() {
 
                 override fun onFailure(call: Call<UploadResponse>, t: Throwable) {
                     Toast.makeText(this@EmailActivity,"please try again after sometime",Toast.LENGTH_LONG).show()
+
                 }
             })
 

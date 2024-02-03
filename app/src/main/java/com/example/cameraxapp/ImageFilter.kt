@@ -244,6 +244,7 @@ class ImageFilter : AppCompatActivity() {
 
   }
 
+  @SuppressLint("SuspiciousIndentation")
   private fun softFilter(){
 
     val input_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/CameraX-Image-Input/"
@@ -510,6 +511,8 @@ class ImageFilter : AppCompatActivity() {
       requestRuntimePermissionn()
     }
   }
+
+
   private fun requestRuntimePermissionn(): Boolean {
     if (ActivityCompat.checkSelfPermission(
         this@ImageFilter,

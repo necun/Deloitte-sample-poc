@@ -34,7 +34,7 @@
 
             app:layout_constraintHorizontal_chainStyle="packed"
 
-            android:id="@+id/cameraRetakeImageView"
+            android:id="@+id/cameraRetakeImgVw"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_width="65dp"
@@ -45,16 +45,29 @@
             android:scaleType="centerCrop"/>
         <ImageView
             android:layout_marginStart="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/progressBar"
             android:id="@+id/emailImageView"
-            app:layout_constraintStart_toEndOf="@+id/cameraRetakeImageView"
-            app:layout_constraintTop_toTopOf="@id/cameraRetakeImageView"
-            app:layout_constraintBottom_toBottomOf="@id/cameraRetakeImageView"
+            app:layout_constraintStart_toEndOf="@+id/cameraRetakeImgVw"
+            app:layout_constraintTop_toTopOf="@id/cameraRetakeImgVw"
+            app:layout_constraintBottom_toBottomOf="@id/cameraRetakeImgVw"
             android:layout_width="65dp"
             android:layout_height="65dp"
             android:src="@drawable/email_img"
             android:scaleType="centerCrop"/>
-
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="30dp"
+            app:tint="@color/black"
+            android:layout_height="30dp"
+            android:indeterminate="true"
+            android:visibility="gone"
+            android:indeterminateTintMode="src_atop"
+            android:indeterminateTint="#12AF3A"
+            android:layout_marginBottom="17dp"
+            app:layout_constraintStart_toEndOf="@+id/emailImageView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

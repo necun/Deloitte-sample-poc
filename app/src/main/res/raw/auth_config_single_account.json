@@ -1,0 +1,14 @@
+{
+  "client_id" : "fe124d7d-4b99-4803-93d6-35806659db77",
+  "authorization_user_agent" : "DEFAULT",
+  "redirect_uri" : "msauth://com.example.cameraxapp/1rgDpW12JgYIWr%2B6G4xpMEwTySk%3D",
+  "authorities" : [
+    {
+      "type": "AAD",
+      "audience": {
+        "type": "AzureADandPersonalMicrosoftAccount",
+        "tenant_id": "common"
+      }
+    }
+  ]
+}

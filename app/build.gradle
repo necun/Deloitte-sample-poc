@@ -44,6 +44,7 @@ android {
 
     buildFeatures {
         viewBinding true
+        dataBinding true
     }
     externalNativeBuild {
         cmake {
@@ -83,7 +84,8 @@ chaquopy {
 }
 
 dependencies {
-
+    implementation 'com.android.volley:volley:1.1.1'
+    implementation "com.microsoft.identity.client:msal:2.+"
     // Logging interceptor for OkHttp
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.0"
     implementation "com.squareup.okhttp3:okhttp:4.9.0"

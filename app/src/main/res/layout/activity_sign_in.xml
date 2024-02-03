@@ -6,7 +6,10 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".SignInActivity">
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/rlOne">
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="318dp"
@@ -143,4 +146,10 @@
             android:textColor="#000000"
             android:textStyle="bold" />
     </RelativeLayout>
+</RelativeLayout>
+    <FrameLayout
+        android:visibility="gone"
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </RelativeLayout>
