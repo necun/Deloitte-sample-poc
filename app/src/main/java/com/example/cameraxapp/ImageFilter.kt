@@ -53,7 +53,7 @@ class ImageFilter : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     viewBinding = ActivityImageFilterBinding.inflate(layoutInflater)
     setContentView(viewBinding.root)
-    supportActionBar!!.setBackgroundDrawable(ColorDrawable(resources.getColor(R.color.white)))
+
     //deleteInternalStorageDirectoryy()
     viewBinding.aiFilterImgBtn.setOnClickListener {
       viewBinding.aiFilterProgressbar.visibility=View.VISIBLE
@@ -178,6 +178,7 @@ class ImageFilter : AppCompatActivity() {
     deleteInternalStorageDirectoryy()
   }
 
+  @SuppressLint("SuspiciousIndentation")
   private fun aiFilter(){
 
     val input_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/CameraX-Image-Input/"
@@ -430,8 +431,11 @@ class ImageFilter : AppCompatActivity() {
       contentResolver.openOutputStream(uri) ?: throw IOException("Could not open output stream")
     bitmap.compress(Bitmap.CompressFormat.JPEG, 95, stream)
     stream.close()
-    val msg = "Save succeeded: ${uri.getPath()}"
+    //val msg = "Save succeeded: ${uri.getPath()}"
+    val msg = "Save succeeded"
     Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+    val intent=Intent(this@ImageFilter,EmailActivity::class.java)
+    startActivity(intent)
   }
   private fun doSaveGetSave() {
 
