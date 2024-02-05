@@ -90,7 +90,9 @@ object B2CConfiguration {
      * Returns an array of scopes you wish to acquire as part of the returned token result.
      * These scopes must be added in your B2C application page.
      */
+//    "https://fabrikamb2c.onmicrosoft.com/helloapi/demo.read"
     val scopes: List<String>
         get() = Arrays.asList(
-            "https://fabrikamb2c.onmicrosoft.com/helloapi/demo.read")
+            "https://fabrikamb2c.onmicrosoft.com/helloapi/demo.read"
+           )
 }

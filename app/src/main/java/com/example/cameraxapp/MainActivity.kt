@@ -12,6 +12,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Base64
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.video.Recorder
 import androidx.camera.video.Recording
@@ -38,6 +39,8 @@ import org.opencv.core.Mat
 import org.opencv.imgproc.Imgproc
 import java.io.File
 import java.nio.ByteBuffer
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -69,7 +72,7 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     viewBinding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(viewBinding.root)
-
+    println("34345454543545"+generateBase64EncodedSHA1("78:64:56:63:58:35:DE:34:8C:DB:4A:62:5C:DE:68:BD:DB:6B:07:3E"))
     supportActionBar?.hide()
 
     // Request camera permissions
@@ -440,6 +443,33 @@ class MainActivity : AppCompatActivity() {
       }
     }.toTypedArray()
   }
+  fun generateBase64EncodedSHA1(input: String): String {
+    try {
+      val info = packageManager.getPackageInfo(
+        packageName,
+        PackageManager.GET_SIGNATURES
+      )
+      for (signature in info.signatures) {
+        val md = MessageDigest.getInstance("SHA")
+        md.update(signature.toByteArray())
+        val hash = Base64.encodeToString(
+          md.digest(),
+          Base64.DEFAULT
+        )
+        Log.d("KeyHash", "KeyHash:$hash")
+      }
+    } catch (e: PackageManager.NameNotFoundException) {
+      Log.d("KeyHash", e.toString())
+    } catch (e: NoSuchAlgorithmException) {
+    }
+    // Convert the input string to bytes
+    val bytes = input.toByteArray()
 
+    // Compute the SHA1 hash
+    val sha1Digest = MessageDigest.getInstance("SHA-1").digest(bytes)
+
+    // Base64 encode the SHA1 hash
+    return Base64.encodeToString(sha1Digest, Base64.NO_WRAP)
+  }
 }
 

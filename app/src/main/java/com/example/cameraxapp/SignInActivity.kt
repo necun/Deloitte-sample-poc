@@ -36,11 +36,11 @@ class SignInActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        btnSignIn.setOnClickListener {
+//        btnSignIn.setOnClickListener {
             setCurrentFragment(AppFragment.SingleAccount)
 //            startActivity(Intent(this,MainActivity::class.java))
 //            finish()
-        }
+       // }
     }
 
     private fun setCurrentFragment(newFragment: AppFragment) {
@@ -54,8 +54,8 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun attachFragment(fragment: Fragment) {
-        rl1.visibility = View.GONE
-        fl.visibility=View.VISIBLE
+//        rl1.visibility = View.GONE
+//        fl.visibility=View.VISIBLE
         supportFragmentManager
             .beginTransaction()
             .setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE)

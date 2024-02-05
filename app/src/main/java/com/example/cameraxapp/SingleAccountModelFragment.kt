@@ -3,6 +3,7 @@ package com.example.cameraxapp
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -61,7 +62,7 @@ class SingleAccountModeFragment : Fragment() {
                 }
 
                 override fun onError(exception: MsalException) {
-                    binding.txtLog.text = exception.toString()
+                    binding.txtLog.text = "11111111"+exception.toString()
                 }
             })
 
@@ -73,7 +74,7 @@ class SingleAccountModeFragment : Fragment() {
      */
     private fun initializeUI() {
 
-        binding.btnSignIn.setOnClickListener(View.OnClickListener {
+        binding.signInLL.setOnClickListener(View.OnClickListener {
             if (mSingleAccountApp == null) {
                 return@OnClickListener
             }
@@ -163,7 +164,7 @@ class SingleAccountModeFragment : Fragment() {
      * i.e. from "User.Read User.ReadWrite" to ["user.read", "user.readwrite"]
      */
     private fun getScopes(): Array<String> {
-        return binding.scope.text.toString().toLowerCase().split(" ".toRegex()).dropLastWhile { it.isEmpty() }
+        return "user.read".toLowerCase().split(" ".toRegex()).dropLastWhile { it.isEmpty() }
             .toTypedArray()
     }
 
@@ -190,7 +191,7 @@ class SingleAccountModeFragment : Fragment() {
             }
 
             override fun onError(exception: MsalException) {
-                binding.txtLog.text = exception.toString()
+                binding.txtLog.text = "222222222"+exception.toString()
             }
         })
     }
@@ -213,14 +214,20 @@ class SingleAccountModeFragment : Fragment() {
             override fun onError(exception: MsalException) {
                 /* Failed to acquireToken */
                 Log.d(TAG, "Authentication failed: $exception")
-                displayError(exception)
+//                displayError(exception)
 
                 if (exception is MsalClientException) {
                     /* Exception inside MSAL, more info inside MsalError.java */
+                    println("client exception")
+                    displayError(exception)
                 } else if (exception is MsalServiceException) {
                     /* Exception when communicating with the STS, likely config issue */
+                    println("service exception")
+                    displayError(exception)
                 } else if (exception is MsalUiRequiredException) {
                     /* Tokens expired or no session, retry with interactive */
+                    println("ui required exception")
+                    displayError(exception)
                 }
             }
 
@@ -254,12 +261,14 @@ class SingleAccountModeFragment : Fragment() {
             override fun onError(exception: MsalException) {
                 /* Failed to acquireToken */
                 Log.d(TAG, "Authentication failed: $exception")
-                displayError(exception)
+//                displayError(exception)
 
                 if (exception is MsalClientException) {
                     /* Exception inside MSAL, more info inside MsalError.java */
+                    displayError(exception)
                 } else if (exception is MsalServiceException) {
                     /* Exception when communicating with the STS, likely config issue */
+                    displayError(exception)
                 }
             }
 
@@ -276,7 +285,7 @@ class SingleAccountModeFragment : Fragment() {
     private fun callGraphAPI(authenticationResult: IAuthenticationResult) {
         MSGraphRequestWrapper.callGraphAPIWithVolley(
             context as Context,
-            binding.msgraphUrl.text.toString(),
+            "https://graph.microsoft.com/v1.0/me",
             authenticationResult.accessToken,
             Response.Listener<JSONObject> { response ->
                 /* Successfully called graph, process data and send to UI */
@@ -302,14 +311,19 @@ class SingleAccountModeFragment : Fragment() {
      * Display the graph response
      */
     private fun displayGraphResult(graphResponse: JSONObject) {
-        binding.txtLog.text = graphResponse.toString()
+        binding.txtLog.text = "333333"+graphResponse.toString()+"4434343434"
+        val userEmailId = graphResponse.get("mail")
+
+val intent = Intent(requireActivity(),MainActivity::class.java)
+        intent.putExtra("userEmailId",userEmailId.toString())
+        startActivity(intent)
     }
 
     /**
      * Display the error message
      */
     private fun displayError(exception: Exception) {
-        binding.txtLog.text = exception.toString()
+        binding.txtLog.text = "444444444444444"+exception.toString()
     }
 
     /**
