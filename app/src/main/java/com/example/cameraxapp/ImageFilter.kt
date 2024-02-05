@@ -148,42 +148,6 @@ class ImageFilter : AppCompatActivity() {
 //      viewBinding.blackAndWhiteFilterImageView.setImageResource(R.drawable.ic_no_picture)
 //      viewBinding.aiFilterImageView.setImageResource(R.drawable.ic_no_picture)
 //      viewBinding.softFilterImageView.setImageResource(R.drawable.ic_no_picture)
-      val original = original ?: return@setOnClickListener
-      result = original.clone()
-      val bitmap =
-        Bitmap.createBitmap(original.cols(), original.rows(), Bitmap.Config.ARGB_8888)
-      Utils.matToBitmap(original, bitmap)
-
-      val name = "no_filter_image"
-      val contentValues = ContentValues().apply {
-        put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-        put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-          put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image-Output")
-        }
-      }
-
-
-      val uri = contentResolver.insert(
-        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,contentValues
-      ) ?: throw IOException("Could not open uri")
-//    val stream = contentResolver.openOutputStream(uri) ?: throw IOException("Could not open output stream")
-//
-//// Create a buffer to hold the bitmap's pixels
-//    val byteBuffer = ByteBuffer.allocate(bitmap.byteCount)
-//    bitmap.copyPixelsToBuffer(byteBuffer)
-//    byteBuffer.rewind()
-//
-//// Write the buffer's contents to the output stream
-//    stream.write(byteBuffer.array())
-//
-//    stream.close()
-      val stream =
-        contentResolver.openOutputStream(uri) ?: throw IOException("Could not open output stream")
-      bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-      stream.close()
-//val msg = "Save succeeded: ${uri.getPath()}"
-//Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
       doNoFilter()
     }
 //    viewBinding.OCRButton.setOnClickListener {
@@ -277,7 +241,6 @@ class ImageFilter : AppCompatActivity() {
     System.out.println("122334465=")
     val b=BitmapFactory.decodeStream(FileInputStream(f))
     if(b != null){
-      enhancedImageType = "grey_filter_image"
       viewBinding.imageView2.setImageBitmap(b)
       viewBinding.greyFilterImageView.setImageBitmap(b)
       viewBinding.greyFilterProgressbar.visibility = View.GONE
@@ -312,13 +275,12 @@ class ImageFilter : AppCompatActivity() {
     System.out.println("122334465=")
     val b=BitmapFactory.decodeStream(FileInputStream(f))
           if(b != null) {
-            enhancedImageType = "soft_filter_image"
             viewBinding.imageView2.setImageBitmap(b)
                viewBinding.softFilterImageView.setImageBitmap(b)
             viewBinding.softFilterProgressbar.visibility = View.GONE
           }else{
-           // viewBinding.softFilterImageView.setImageResource(R.drawable.ic_no_picture);
-            viewBinding.softFilterProgressbar.visibility= View.VISIBLE
+            viewBinding.softFilterImageView.setImageResource(R.drawable.ic_no_picture);
+           // viewBinding.softFilterProgressbar.visibility= View.VISIBLE
 
           }
   }
@@ -484,9 +446,7 @@ class ImageFilter : AppCompatActivity() {
     //val msg = "Save succeeded: ${uri.getPath()}"
     val msg = "Save succeeded"
     Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-
     val intent=Intent(this@ImageFilter,EmailActivity::class.java)
-    intent.putExtra("enhancedImageType",enhancedImageType)
     startActivity(intent)
   }
   private fun doSaveGetSave() {

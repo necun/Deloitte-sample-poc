@@ -193,7 +193,27 @@ class EmailActivity : AppCompatActivity() {
 
 
     }
-
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            14 -> {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this@EmailActivity, "Permission Granted", Toast.LENGTH_LONG)
+                        .show()
+                } else {
+                    ActivityCompat.requestPermissions(
+                        this@EmailActivity,
+                        arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                        14
+                    )
+                }
+            }
+        }
+    }
 
     private fun initImageDisplay(){
         val enhancedImageType = intent.getStringExtra("enhancedImageType")

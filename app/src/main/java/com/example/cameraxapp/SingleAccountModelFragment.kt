@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import android.content.SharedPreferences
 import androidx.fragment.app.Fragment
 import com.android.volley.Response
 import com.example.cameraxapp.databinding.ActivityMainBinding
@@ -19,6 +20,7 @@ import com.microsoft.identity.client.exception.MsalClientException
 import com.microsoft.identity.client.exception.MsalException
 import com.microsoft.identity.client.exception.MsalServiceException
 import com.microsoft.identity.client.exception.MsalUiRequiredException
+
 
 import org.json.JSONObject
 
@@ -75,14 +77,26 @@ class SingleAccountModeFragment : Fragment() {
     private fun initializeUI() {
 
         binding.signInLL.setOnClickListener(View.OnClickListener {
-            if (mSingleAccountApp == null) {
-                return@OnClickListener
-            }
+            val sharedPreference =  this@SingleAccountModeFragment.requireActivity().getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
+            checkIfUserIsLoggedIn()
 
-            mSingleAccountApp!!.signIn(activity as Activity, "", getScopes(), getAuthInteractiveCallback())
+                  if (mSingleAccountApp == null) {
+                      return@OnClickListener
+                  }
+
+                  mSingleAccountApp!!.signIn(
+                      activity as Activity,
+                      "",
+                      getScopes(),
+                      getAuthInteractiveCallback()
+                  )
+
+
         })
 
         binding.btnRemoveAccount.setOnClickListener(View.OnClickListener {
+
+
             if (mSingleAccountApp == null) {
                 return@OnClickListener
             }
@@ -147,10 +161,36 @@ class SingleAccountModeFragment : Fragment() {
         })
 
     }
+    private fun checkIfUserIsLoggedIn() {
+        //Toast.makeText(requireActivity(),"443545454545",Toast.LENGTH_LONG).show()
+        mSingleAccountApp?.getCurrentAccountAsync(object : ISingleAccountPublicClientApplication.CurrentAccountCallback {
+            override fun onAccountLoaded(activeAccount: IAccount?) {
+                if (activeAccount != null) {
+                    // User is logged in
+                    Log.d(TAG, "User is already logged in: ${activeAccount.username}")
+                    val intent = Intent(requireActivity(),MainActivity::class.java)
+                    startActivity(intent)
+                   // updateUI(activeAccount) // Update your UI accordingly
+                } else {
+                    // User is not logged in
+                    Log.d(TAG, "No user is logged in.")
+                   // updateUI(null) // Update UI to reflect not logged in status
+                }
+            }
+
+            override fun onAccountChanged(priorAccount: IAccount?, currentAccount: IAccount?) {
+                // Handle account changes if needed
+            }
+
+            override fun onError(exception: MsalException) {
+                Log.d(TAG, "Error checking login status: ${exception.message}")
+            }
+        })
+    }
 
     override fun onResume() {
         super.onResume()
-
+             checkIfUserIsLoggedIn()
         initializeUI()
         /**
          * The account may have been removed from the device (if broker is in use).
@@ -301,6 +341,7 @@ class SingleAccountModeFragment : Fragment() {
                 displayError(error)
             })
     }
+
 
     //
     // Helper methods manage UI updates

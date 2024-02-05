@@ -72,7 +72,7 @@ chaquopy {
 
         }
         pyc {
-            src = false
+            src = true
         }
     }
     //productFlavors { }

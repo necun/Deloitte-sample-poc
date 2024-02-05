@@ -1,50 +1,45 @@
 package com.example.cameraxapp
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.ImageFormat
-import android.graphics.PointF
 import android.media.Image
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.*
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.video.Recorder
 import androidx.camera.video.Recording
 import androidx.camera.video.VideoCapture
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import android.widget.Toast
-import androidx.camera.lifecycle.ProcessCameraProvider
-import android.util.Log
-import androidx.camera.core.*
-import androidx.camera.video.FallbackStrategy
-import androidx.camera.video.MediaStoreOutputOptions
-import androidx.camera.video.Quality
-import androidx.camera.video.QualitySelector
-import androidx.camera.video.VideoRecordEvent
-import androidx.core.content.PermissionChecker
 import com.example.cameraxapp.databinding.ActivityMainBinding
+import com.microsoft.identity.client.IPublicClientApplication
+import com.microsoft.identity.client.ISingleAccountPublicClientApplication
+import com.microsoft.identity.client.PublicClientApplication
+import com.microsoft.identity.client.exception.MsalException
 import org.opencv.android.OpenCVLoader
 import org.opencv.android.Utils
 import org.opencv.core.CvType
 import org.opencv.core.Mat
 import org.opencv.imgproc.Imgproc
-import java.io.File
-import java.nio.ByteBuffer
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 typealias CVAnalyzerListener = () -> Unit 
 
@@ -53,7 +48,7 @@ const val EXTRA_PICTURE_TYPE = "com.example.cameraxapp.PICTURE_TYPE"
 
 class MainActivity : AppCompatActivity() {
   private lateinit var viewBinding: ActivityMainBinding
-
+  private var mSingleAccountApp: ISingleAccountPublicClientApplication? = null
   private var imageCapture: ImageCapture? = null
 
   private var videoCapture: VideoCapture<Recorder>? = null
@@ -76,6 +71,25 @@ class MainActivity : AppCompatActivity() {
     setContentView(viewBinding.root)
     println("34345454543545"+generateBase64EncodedSHA1("78:64:56:63:58:35:DE:34:8C:DB:4A:62:5C:DE:68:BD:DB:6B:07:3E"))
     supportActionBar?.hide()
+    PublicClientApplication.createSingleAccountPublicClientApplication(
+      this@MainActivity as Context,
+      R.raw.auth_config_single_account,
+      object : IPublicClientApplication.ISingleAccountApplicationCreatedListener {
+        override fun onCreated(application: ISingleAccountPublicClientApplication) {
+          /**
+           * This test app assumes that the app is only going to support one account.
+           * This requires "account_mode" : "SINGLE" in the config json file.
+           *
+           */
+          mSingleAccountApp = application
+
+
+        }
+
+        override fun onError(exception: MsalException) {
+         // binding.txtLog.text = "11111111"+exception.toString()
+        }
+      })
                       val userEmailId = intent.getStringExtra("userEmailId")
     val sharedPreference =  getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
     var editor = sharedPreference.edit()
@@ -92,11 +106,38 @@ class MainActivity : AppCompatActivity() {
       }
 
       // Set up the listeners for take photo and video capture buttons
-      viewBinding.imageCaptureButton.setOnClickListener { takePhoto() }
+      viewBinding.imageCaptureButton.setOnClickListener {
+        takePhoto()
+
+        /**
+         * Removes the signed-in account and cached tokens from this app.
+         */
+//        mSingleAccountApp!!.signOut(object : ISingleAccountPublicClientApplication.SignOutCallback {
+//          override fun onSignOut() {
+//
+//            performOperationOnSignOut()
+//          }
+//
+//          override fun onError(exception: MsalException) {
+//            Toast.makeText(this@MainActivity,"something went wrong, please try again after sometine",Toast.LENGTH_LONG).show()
+//          }
+//        })
+      }
 
       cameraExecutor = Executors.newSingleThreadExecutor()
     }
-
+  private fun performOperationOnSignOut() {
+    val signOutText = "Signed Out."
+    val preferences = getSharedPreferences("userEmailId", MODE_PRIVATE)
+    val editor = preferences.edit()
+    editor.clear()
+    editor.apply()
+    finish()
+    Toast.makeText(this@MainActivity, signOutText, Toast.LENGTH_SHORT)
+      .show()
+    val intent = Intent(this@MainActivity,SignInActivity::class.java)
+    startActivity(intent)
+  }
     private fun takePhoto() {
       // Get a stable reference of the modifiable image capture use case
       val imageCapture = imageCapture ?: return
@@ -221,14 +262,14 @@ class MainActivity : AppCompatActivity() {
 
 
       private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(
-          baseContext, it) == PackageManager.PERMISSION_GRANTED
+        ContextCompat.checkSelfPermission(baseContext, it) == PackageManager.PERMISSION_GRANTED
       }
 
         override fun onRequestPermissionsResult(
           requestCode: Int, permissions: Array<String>, grantResults:
           IntArray) {
-            if (requestCode == REQUEST_CODE_PERMISSIONS) {
+          super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+          if (requestCode == REQUEST_CODE_PERMISSIONS) {
               if (allPermissionsGranted()) {
                 startCamera()
               } else {
@@ -337,6 +378,7 @@ class MainActivity : AppCompatActivity() {
 
           return rgbaMat
         }
+        @SuppressLint("UnsafeOptInUsageError")
         override fun analyze(imageProxy: ImageProxy) {
           val mat = imageProxy.image?.yuvToRgba();
           val rotation = imageProxy.imageInfo.rotationDegrees

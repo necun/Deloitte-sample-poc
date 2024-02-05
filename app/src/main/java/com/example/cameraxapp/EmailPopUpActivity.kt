@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.cameraxapp.databinding.ActivityEmailPopUpBinding
@@ -93,6 +94,27 @@ class EmailPopUpActivity : AppCompatActivity() {
             return false
         }
         return true
+    }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            14 -> {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this@EmailPopUpActivity, "Permission Granted", Toast.LENGTH_LONG)
+                        .show()
+                } else {
+                    ActivityCompat.requestPermissions(
+                        this@EmailPopUpActivity,
+                        arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                        14
+                    )
+                }
+            }
+        }
     }
 
 }

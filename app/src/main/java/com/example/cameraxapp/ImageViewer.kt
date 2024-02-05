@@ -3,21 +3,27 @@ package com.example.cameraxapp
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.decodeBitmap
 import com.example.cameraxapp.databinding.ActivityImageViewerBinding
 import org.opencv.android.Utils
 import org.opencv.core.Mat
 import org.opencv.imgcodecs.Imgcodecs
 import org.opencv.imgproc.Imgproc
+import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -35,6 +41,7 @@ class ImageViewer : AppCompatActivity() {
     setContentView(viewBinding.root)
 
       viewBinding.warpButton.setOnClickListener {
+        deleteInternalStorageDirectoryy()
         warpImage()
       }
 
@@ -129,7 +136,78 @@ class ImageViewer : AppCompatActivity() {
     }
   }
 
+  fun deleteInternalStorageDirectoryy() {
+    if (ContextCompat.checkSelfPermission(
+        this@ImageViewer,
+        android.Manifest.permission.READ_EXTERNAL_STORAGE
+      ) == PackageManager.PERMISSION_DENIED
+    ) {
+      val input_pathh = File(
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+          .toString() + "/CameraX-Image/"
+      )
 
+
+      val input_path = File(
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+          .toString() + "/CameraX-Image-Input/"
+      )
+      val output_pathh = File(
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+          .toString() + "/CameraX-Image-Output/"
+      )
+      if (input_path.exists()) {
+        input_path.deleteRecursively()
+      }
+      if (input_pathh.exists()) {
+        input_pathh.deleteRecursively()
+      }
+      if (output_pathh.exists()) {
+        output_pathh.deleteRecursively()
+      }
+    } else {
+      requestRuntimePermissionn()
+    }
+  }
+
+
+  private fun requestRuntimePermissionn(): Boolean {
+    if (ActivityCompat.checkSelfPermission(
+        this@ImageViewer,
+        android.Manifest.permission.READ_EXTERNAL_STORAGE
+      ) != PackageManager.PERMISSION_GRANTED
+    ) {
+      ActivityCompat.requestPermissions(
+        this@ImageViewer,
+        arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+        14
+      )
+      return false
+    }
+    return true
+  }
+
+  override fun onRequestPermissionsResult(
+    requestCode: Int,
+    permissions: Array<out String>,
+    grantResults: IntArray
+  ) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    when (requestCode) {
+      14 -> {
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          Toast.makeText(this@ImageViewer, "Permission Granted", Toast.LENGTH_LONG)
+            .show()
+        } else {
+          ActivityCompat.requestPermissions(
+            this@ImageViewer,
+            arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+            14
+          )
+        }
+      }
+    }
+  }
 
   companion object {
     private const val TAG = "CameraXApp"
