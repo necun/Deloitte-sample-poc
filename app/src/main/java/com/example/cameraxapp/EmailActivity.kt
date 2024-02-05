@@ -1,6 +1,7 @@
 package com.example.cameraxapp
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
@@ -118,19 +119,23 @@ class EmailActivity : AppCompatActivity() {
     @SuppressLint("SuspiciousIndentation")
     private fun initSendEmail(){
         viewBinding.progressBar.visibility = View.VISIBLE
+        val sharedPreference =  getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
+       val userEmailId= sharedPreference.getString("userEmailId","defaultName")
+
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
 
-
+                  val enhancedImageType = intent.getStringExtra("enhancedImageType")
+                     println("454354353346546"+enhancedImageType)
         val output_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/CameraX-Image-Output/"
-        val file= File(output_path,"enhanced_image.jpg")
+        val file= File(output_path,"$enhancedImageType.jpg")
         val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
         val part = MultipartBody.Part.createFormData("image",file.name,requestBody)
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(logging)
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(6, TimeUnit.MINUTES)
+            .writeTimeout(6, TimeUnit.MINUTES)
+            .readTimeout(6, TimeUnit.MINUTES)
             .build()
         val retrofit = Retrofit.Builder().baseUrl("http://13.200.238.163:5001/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -141,7 +146,7 @@ class EmailActivity : AppCompatActivity() {
 
 //            val response =  retrofit.sendEmail(part,"agarwalkomal2030@gmail.com","filtered image","please the image in your mail")
 //                   Log.d("response retrofit",response)
-            val listCall: Call<UploadResponse> = retrofit.sendEmail(part,"agarwalkomal2030@gmail.com","this is test","hello please check your image")
+            val listCall: Call<UploadResponse> = retrofit.sendEmail(part,userEmailId.toString(),"this is test","hello please check your image")
 
             listCall.enqueue(object : Callback<UploadResponse> {
                 override fun onResponse(
@@ -191,11 +196,11 @@ class EmailActivity : AppCompatActivity() {
 
 
     private fun initImageDisplay(){
-
+        val enhancedImageType = intent.getStringExtra("enhancedImageType")
 
         val output_path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/CameraX-Image-Output/"
 
-        val f= File(output_path,"enhanced_image.jpg")
+        val f= File(output_path,"$enhancedImageType.jpg")
         System.out.println("122334465=")
         val b= BitmapFactory.decodeStream(FileInputStream(f))
         viewBinding.imageView.setImageBitmap(b)

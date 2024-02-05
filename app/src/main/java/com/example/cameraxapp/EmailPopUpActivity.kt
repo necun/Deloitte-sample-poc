@@ -1,5 +1,6 @@
 package com.example.cameraxapp
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,9 @@ class EmailPopUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityEmailPopUpBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
+        val sharedPreference =  getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
+        val userEmailId= sharedPreference.getString("userEmailId","defaultName")
+        viewBinding.emailId.text = userEmailId.toString()
         viewBinding.cameraButton.setOnClickListener{
             deleteInternalStorageDirectoryy()
             val intent = Intent(this@EmailPopUpActivity,MainActivity::class.java)

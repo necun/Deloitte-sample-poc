@@ -2,7 +2,9 @@ package com.example.cameraxapp
 
 import android.Manifest
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.ImageFormat
@@ -74,7 +76,13 @@ class MainActivity : AppCompatActivity() {
     setContentView(viewBinding.root)
     println("34345454543545"+generateBase64EncodedSHA1("78:64:56:63:58:35:DE:34:8C:DB:4A:62:5C:DE:68:BD:DB:6B:07:3E"))
     supportActionBar?.hide()
+                      val userEmailId = intent.getStringExtra("userEmailId")
+    val sharedPreference =  getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
+    var editor = sharedPreference.edit()
 
+    editor.putString("userEmailId",userEmailId )
+    editor.apply()
+    editor.commit()
     // Request camera permissions
     if (allPermissionsGranted()) {
       startCamera()

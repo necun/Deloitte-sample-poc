@@ -176,6 +176,10 @@ class SingleAccountModeFragment : Fragment() {
         if (mSingleAccountApp == null) {
             return
         }
+//        else if(mSingleAccountApp != null){
+//            val intent = Intent(requireActivity(),MainActivity::class.java)
+//            startActivity(intent)
+//        }
 
         mSingleAccountApp!!.getCurrentAccountAsync(object :
             ISingleAccountPublicClientApplication.CurrentAccountCallback {
@@ -311,7 +315,7 @@ class SingleAccountModeFragment : Fragment() {
      * Display the graph response
      */
     private fun displayGraphResult(graphResponse: JSONObject) {
-        binding.txtLog.text = "333333"+graphResponse.toString()+"4434343434"
+        binding.txtLog.text = "333333"+graphResponse.toString()
         val userEmailId = graphResponse.get("mail")
 
 val intent = Intent(requireActivity(),MainActivity::class.java)
